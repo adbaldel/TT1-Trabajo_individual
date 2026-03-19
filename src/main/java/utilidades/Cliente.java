@@ -83,12 +83,6 @@ public class Cliente
         return result;
     }
 
-    /*
-     *SolicitudApi* | [**solicitudComprobarSolicitudGet**](docs/SolicitudApi.md#solicitudComprobarSolicitudGet) | **GET** /Solicitud/ComprobarSolicitud |
-     *SolicitudApi* | [**solicitudGetSolicitudesUsuarioGet**](docs/SolicitudApi.md#solicitudGetSolicitudesUsuarioGet) | **GET** /Solicitud/GetSolicitudesUsuario |
-     *SolicitudApi* | [**solicitudSolicitarPost**](docs/SolicitudApi.md#solicitudSolicitarPost) | **POST** /Solicitud/Solicitar |
-     */
-
     private static List<Integer> solicitudComprobarSolicitudGet(ApiClient defaultClient, String nombreUsuario, Integer tok)
     {
         SolicitudApi apiInstance = new SolicitudApi(defaultClient);
