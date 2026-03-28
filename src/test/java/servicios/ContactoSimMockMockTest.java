@@ -1,5 +1,6 @@
 package servicios;
 
+import com.tt1.mocks.ContactoSimMock;
 import modelo.DatosSimulation;
 import modelo.DatosSolicitud;
 import modelo.Entidad;
@@ -13,22 +14,22 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ContactoSimTest
+class ContactoSimMockMockTest
 {
-    private ContactoSim contactoSim;
+    private ContactoSimMock contactoSimMock;
 
     // --- Arrange Before/After each test -------------------------------------------------------------------
 
     @BeforeEach
     void setUp()
     {
-        contactoSim = new ContactoSim();
+        contactoSimMock = new ContactoSimMock();
     }
 
     @AfterEach
     void tearDown()
     {
-        contactoSim = null;
+        contactoSimMock = null;
     }
 
     // --- --------------- -------------------------------------------------------------------
@@ -46,7 +47,7 @@ class ContactoSimTest
         DatosSolicitud sol = new DatosSolicitud(nums);
         int tok;
 
-        tok = contactoSim.solicitarSimulation(sol);
+        tok = contactoSimMock.solicitarSimulation(sol);
 
         assertTrue(tok >= 0);
     }
@@ -60,7 +61,7 @@ class ContactoSimTest
 
         DatosSimulation sim;
 
-        sim = contactoSim.descargarDatos(tok);
+        sim = contactoSimMock.descargarDatos(tok);
 
         assertNotNull(sim);
     }
@@ -72,7 +73,7 @@ class ContactoSimTest
     {
         List<Entidad> entities;
 
-        entities = contactoSim.getEntities();
+        entities = contactoSimMock.getEntities();
 
         assertEquals(2, entities.size());
     }
@@ -84,10 +85,10 @@ class ContactoSimTest
     {
         boolean valid1, valid2, valid0, valid3;
 
-        valid1 = contactoSim.isValidEntityId(1);
-        valid2 = contactoSim.isValidEntityId(2);
-        valid0 = contactoSim.isValidEntityId(0);
-        valid3 = contactoSim.isValidEntityId(3);
+        valid1 = contactoSimMock.isValidEntityId(1);
+        valid2 = contactoSimMock.isValidEntityId(2);
+        valid0 = contactoSimMock.isValidEntityId(0);
+        valid3 = contactoSimMock.isValidEntityId(3);
 
         assertTrue(valid1);
         assertTrue(valid2);

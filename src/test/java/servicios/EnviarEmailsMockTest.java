@@ -1,5 +1,6 @@
 package servicios;
 
+import com.tt1.mocks.EnviarEmailsMock;
 import modelo.Destinatario;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,22 +9,22 @@ import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EnviarEmailsTest
+class EnviarEmailsMockTest
 {
-    private EnviarEmails enviarEmails;
+    private EnviarEmailsMock enviarEmailsMock;
 
     // --- Arrange Before/After each test -------------------------------------------------------------------
 
     @BeforeEach
     void setUp()
     {
-        enviarEmails = new EnviarEmails(LoggerFactory.getLogger("EnviarEmailsTest"));
+        enviarEmailsMock = new EnviarEmailsMock(LoggerFactory.getLogger("EnviarEmailsTest"));
     }
 
     @AfterEach
     void tearDown()
     {
-        enviarEmails = null;
+        enviarEmailsMock = null;
     }
 
     // --- --------------- -------------------------------------------------------------------
@@ -39,7 +40,7 @@ class EnviarEmailsTest
         String email = "Hello World!";
         boolean enviado;
 
-        enviado = enviarEmails.enviarEmail(dest, email);
+        enviado = enviarEmailsMock.enviarEmail(dest, email);
 
         assertTrue(enviado);
     }

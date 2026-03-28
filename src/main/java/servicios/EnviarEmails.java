@@ -52,10 +52,12 @@ public class EnviarEmails implements InterfazEnviarEmails
     {
         EmailApi apiInstance = new EmailApi(client);
         EmailResponse result = null;
+        boolean exito = false;
 
         try
         {
             result = apiInstance.emailPost(dest.getAddress(), message);
+            exito = result.getErrorMessage() != null;
         }
         catch (ApiException e)
         {
@@ -66,6 +68,6 @@ public class EnviarEmails implements InterfazEnviarEmails
             e.printStackTrace();
         }
 
-        return result;
+        return exito;
     }
 }

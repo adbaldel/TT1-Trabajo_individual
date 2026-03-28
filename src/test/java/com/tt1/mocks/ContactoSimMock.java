@@ -5,7 +5,6 @@ import modelo.DatosSimulation;
 import modelo.DatosSolicitud;
 import modelo.Entidad;
 import modelo.Punto;
-import servicios.ContactoSim;
 
 import java.util.ArrayList;
 import java.util.HashMap;
