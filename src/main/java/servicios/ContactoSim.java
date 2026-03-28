@@ -61,7 +61,7 @@ public class ContactoSim implements InterfazContactoSim
         nombreUsuario = "trabajo-individual-tt1";
 
         client = Configuration.getDefaultApiClient();
-        client.setBasePath(LOCALHOST_SIM);
+        client.setBasePath(DOCKERCOMPOSE_SIM);
     }
 
     /**
