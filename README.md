@@ -8,6 +8,20 @@ Este proyecto es una aplicación web que actúa como una capa de presentación a
 
 Desarrollada bajo el framework Spring Boot, esta aplicación se encarga de interactuar con la API REST del backend para enviar solicitudes de simulación, consultar su estado, obtener resultados y ofrecer una interfaz gráfica de usuario fácil de usar mediante plantillas HTML dinámicas.
 
+## **Referencia de la Web App**
+
+La capa de presentación responde a las siguientes peticiones HTTP con páginas web en HTML:
+
+### **Gestión de Simulaciones (Solicitudes)**
+
+* `GET /solicitud`: Devuelve un formulario a rellenar con la cantidad de entidades que se quiere simular. Al presionar aceptar en el formulario llama al POST de la misma dirección (`/solicitud`).
+* `POST /solicitud`: Devuelve una página web en la que se muestra el token con el que se podrá consultar el resultado de la simulación solicitada.
+
+### **Resultados**
+
+* `GET /grid`: Devuelve una página web con los resultados finales de una simulación completada, requiriendo el token de la simulación como parámetro.
+
+
 ## **Estructura Principal**
 
 La aplicación sigue el patrón arquitectónico Modelo-Vista-Controlador (MVC) y se divide en los siguientes componentes principales:
