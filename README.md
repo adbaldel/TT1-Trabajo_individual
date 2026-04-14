@@ -14,13 +14,12 @@ La capa de presentación responde a las siguientes peticiones HTTP con páginas 
 
 ### **Gestión de Simulaciones (Solicitudes)**
 
-* `GET /solicitud`: Devuelve un formulario a rellenar con la cantidad de entidades que se quiere simular. Al presionar aceptar en el formulario llama al POST de la misma dirección (`/solicitud`).
+* `GET /solicitud`: Devuelve un formulario a rellenar con la cantidad de entidades que se quiere simular. Al presionar aceptar en el formulario llama al `POST` de la misma dirección (`/solicitud`).
 * `POST /solicitud`: Devuelve una página web en la que se muestra el token con el que se podrá consultar el resultado de la simulación solicitada.
 
 ### **Resultados**
 
 * `GET /grid`: Devuelve una página web con los resultados finales de una simulación completada, requiriendo el token de la simulación como parámetro.
-
 
 ## **Estructura Principal**
 
