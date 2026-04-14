@@ -4,50 +4,47 @@
 
 ## **Descripción del Proyecto**
 
-Este proyecto es una aplicación web que actúa como una capa de presentación amigable (frontend) para el servidor de simulaciones desarrollado en el Trabajo en Grupo de TT1.
+Este proyecto es una aplicación web que actúa como la capa de presentación interactiva (frontend) para el servidor de simulaciones desarrollado en el Trabajo en Grupo de TT1.
 
-Desarrollada bajo el framework Spring Boot, esta aplicación se encarga de interactuar con la API REST del backend para enviar solicitudes de simulación, consultar su estado, obtener resultados y ofrecer una interfaz gráfica de usuario fácil de usar mediante plantillas HTML dinámicas.
+Su función principal es ofrecer una interfaz gráfica de usuario (GUI) amigable en el navegador, permitiendo a los usuarios interactuar con la API REST del backend de manera transparente. El sistema se encarga de enviar solicitudes de creación de simulaciones, consultar los tokens de estado, descargar los resultados y renderizarlos visualmente en forma de animaciones (grid).
+
+## **Arquitectura y Estructura Principal**
+
+La aplicación está construida sobre Spring Boot y sigue rigurosamente el patrón arquitectónico Modelo-Vista-Controlador (MVC), dividiendo sus responsabilidades en los siguientes paquetes principales:
+
+* **Presentción / Controladores (`com.tt1.simwebapp.presentacion`):** Gestionan el enrutamiento HTTP y las interacciones del usuario capturando las peticiones de los formularios web (ej. `SolicitudController`, `GridController`).
+* **Lógica de Negocio / Servicios (`com.tt1.simwebapp.logica`):** Contiene los servicios que actúan como clientes REST para comunicarse con la API del backend autogenerada mediante OpenAPI (`ContactoSim`, `EnviarEmails`).
+* **Modelo de Dominio (`com.tt1.simwebapp.modelo`):** Clases que encapsulan los datos de las simulaciones, entidades, puntos y datos de los formularios.
+* **Vistas (`src/main/resources/templates`):** Páginas HTML procesadas dinámicamente en el servidor utilizando el motor Thymeleaf (ej. `solicitud.html`, `grid.html`, `formResult.html`).
 
 ## **Referencia de la Web App**
 
-La capa de presentación responde a las siguientes peticiones HTTP con páginas web en HTML:
+La capa de presentación responde a las siguientes peticiones HTTP sirviendo vistas en HTML:
 
 ### **Gestión de Simulaciones (Solicitudes)**
-
-* `GET /solicitud`: Devuelve un formulario a rellenar con la cantidad de entidades que se quiere simular. Al presionar aceptar en el formulario llama al `POST` de la misma dirección (`/solicitud`).
-* `POST /solicitud`: Devuelve una página web en la que se muestra el token con el que se podrá consultar el resultado de la simulación solicitada.
+* `GET /solicitud`: Devuelve un formulario para introducir las cantidades iniciales de cada entidad a simular.
+* `POST /solicitud`: Procesa los datos del formulario, realiza la llamada al servidor grupal y devuelve una vista con el `token` asociado a la solicitud para futuras consultas.
 
 ### **Resultados**
+* `GET /grid`: Recupera los datos de una simulación finalizada (requiriendo el parámetro `tok` con el token de simulación) y renderiza una vista con un tablero dinámico interactivo (slider temporal) mostrando las entidades.
 
-* `GET /grid`: Devuelve una página web con los resultados finales de una simulación completada, requiriendo el token de la simulación como parámetro.
-
-## **Estructura Principal**
-
-La aplicación sigue el patrón arquitectónico Modelo-Vista-Controlador (MVC) y se divide en los siguientes componentes principales:
-
-* **Controladores (Presentación):** Gestionan el enrutamiento web y las peticiones del usuario (ej. `SolicitudController`, `GridController`).
-* **Lógica / Integración:** Servicios encargados de la comunicación con la API del servidor de simulaciones (`ContactoSim`) y la gestión de notificaciones (`EnviarEmails`).
-* **Vistas:** Páginas HTML renderizadas dinámicamente en el servidor (ej. `solicitud.html`, `grid.html`, `formResult.html`).
-
-## **Tecnologías Utilizadas**
+## **Tecnologías Utilizadas y Dependencias**
 
 * **Lenguaje:** Java 21
 * **Framework Principal:** Spring Boot (v4.0.3)
-* **Gestor de dependencias:** Maven
-* **Motor de plantillas:** Thymeleaf
+* **Gestor de Dependencias:** Maven
+* **Motor de Plantillas:** Thymeleaf
+* **Generación de Clientes:** OpenAPI Generator (openapi-java-client)
 
-## **Dependencias**
-
-El proyecto utiliza Maven para la gestión de dependencias. Las más destacadas incluyen:
-
-* **Spring Boot Starter Web MVC:** Proporciona las herramientas necesarias para crear la aplicación web y exponer endpoints (Controladores).
-* **Spring Boot Starter Thymeleaf:** Motor de plantillas de servidor que permite crear las interfaces gráficas y enlazar datos del modelo de Spring directamente al HTML.
-* **Spring Boot Starter REST Client:** Permite que la aplicación consuma los endpoints HTTP del servidor backend del trabajo en grupo.
-* **Spring Boot Starter Test:** Herramientas para la ejecución de pruebas unitarias sobre los controladores web y clientes REST.
+Las dependencias principales configuradas en el `pom.xml` incluyen:
+* **Spring Boot Starter Web MVC:** Base para aplicaciones web (incluye Tomcat embebido) y enrutamiento MVC.
+* **Spring Boot Starter Thymeleaf:** Enlace y renderizado de interfaces HTML usando datos de los Modelos.
+* **Spring Boot Starter REST Client:** Consumo de APIs REST externas.
+* **Spring Boot Starter Test:** Herramientas de testing unitario y de integración.
 
 ## **Instrucciones de Ejecución**
 
-Para compilar y ejecutar el proyecto localmente usando Maven, puedes utilizar el siguiente comando en la raíz del proyecto:
+Para compilar y ejecutar el proyecto localmente usando Maven, sitúate en la raíz del proyecto y utiliza el comando:
 
 ```bash
 mvn spring-boot:run
