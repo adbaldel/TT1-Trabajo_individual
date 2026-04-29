@@ -173,7 +173,7 @@ public class ContactoSim implements InterfazContactoSim
         for (Map.Entry<Integer, Integer> entry : sol.getNums().entrySet())
         {
             cantidadesEntidades.add(entry.getValue());
-            nombresEntidades.add(getEntities().get(entry.getKey()).getName());
+            nombresEntidades.add(entidades.get(entry.getKey()).getName());
         }
         solicitud.setCantidadesIniciales(cantidadesEntidades);
         solicitud.setNombreEntidades(nombresEntidades);
