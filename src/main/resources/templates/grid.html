@@ -30,13 +30,12 @@
 					for(var j = 0; j < count; j++){
 				    	var node = document.createElement("div");
 						node.id = i+'-'+j;
-				      	node.style.background = colors['0-'+i+'-'+j]??'blue';
+				      	node.style.background = colors['0-'+i+'-'+j]??'yellow';
 				      	grid.appendChild(node);
 				    }
 				}
 				document.getElementsByClassName('grid').item(0).style.gridTemplateColumns = 'repeat('+count+',50px)';
 			}
-			createSquares()
 
 			const slider = document.getElementById("mySlider");
 			const sliderDisplay = document.getElementById("sliderValue"); // Añadido por mí
@@ -47,7 +46,7 @@
 		    	for(var y = 0; y < count; y++){
 					for(var x = 0; x < count; x++){
 						var node = document.getElementById(y+'-'+x);
-						node.style.background = colors[slider.value+'-'+y+'-'+x]??'blue';
+						node.style.background = colors[slider.value+'-'+y+'-'+x]??'yellow';
 					}
 				}
 			});

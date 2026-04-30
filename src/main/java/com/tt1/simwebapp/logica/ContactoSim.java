@@ -26,7 +26,7 @@ import java.util.Map;
 @Service
 public class ContactoSim implements InterfazContactoSim
 {
-    private static final String LOCALHOST_SIM = "http://localhost:8080";
+    private static final String LOCALHOST_SIM = "http://localhost:8081";
     private static final String DOCKERCOMPOSE_SIM = "http://servicio-tt1:8080";
 
     private final String nombreUsuario;
@@ -52,14 +52,21 @@ public class ContactoSim implements InterfazContactoSim
 
         entidad = new Entidad();
         entidad.setId(2);
-        entidad.setName("perros");
-        entidad.setDescripcion("Perros domésticos");
+        entidad.setName("perezoso");
+        entidad.setDescripcion("Perezosos domésticos");
+        entidades.put(entidad.getId(), entidad);
+
+        entidad = new Entidad();
+        entidad.setId(3);
+        entidad.setName("conejo");
+        entidad.setDescripcion("Conejos domésticos");
         entidades.put(entidad.getId(), entidad);
 
         nombreUsuario = "trabajo-individual-tt1";
 
         client = Configuration.getDefaultApiClient();
-        client.setBasePath(DOCKERCOMPOSE_SIM);
+        client.setBasePath(LOCALHOST_SIM);
+        //client.setBasePath(DOCKERCOMPOSE_SIM);
     }
 
     /**
