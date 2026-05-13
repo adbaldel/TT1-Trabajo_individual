@@ -17,41 +17,44 @@
 	</head>
 	<body>
 		<div class="slider-container">
-		    <input type="range" id="mySlider" min="0" th:max="${maxTime}" value="0"> <!-- Cambiado el value por mí -->
+		    <input type="range" id="mySlider" min="0" th:max="${maxTime}-1" value="0"> <!-- Cambiado el value por mí -->
 		    <span id="sliderValue">0</span>
 		</div>
-		<div class="grid" id='gr'></div>
+		<div class="grid" id='gr'>
+			<!-- grid simulación -->
+		</div>
+
 		<script th:inline="javascript">
 			const count = [[${count}]];
 			const colors = [[${colors}]];
+
 			function createSquares(){
 				var grid = document.getElementById('gr');
-				for(var i = 0; i < count; i++){
-					for(var j = 0; j < count; j++){
+				for(var y = 0; y < count; y++){
+					for(var x = 0; x < count; x++){
 				    	var node = document.createElement("div");
-						node.id = i+'-'+j;
-				      	node.style.background = colors['0-'+i+'-'+j]??'yellow';
+						node.id = x+'-'+y;
 				      	grid.appendChild(node);
 				    }
 				}
 				document.getElementsByClassName('grid').item(0).style.gridTemplateColumns = 'repeat('+count+',50px)';
 			}
 
+			createSquares();
+
 			const slider = document.getElementById("mySlider");
-			const sliderDisplay = document.getElementById("sliderValue"); // Añadido por mí
+			const sliderDisplay = document.getElementById("sliderValue");
 
 			slider.addEventListener("input", function() {
-				sliderDisplay.textContent = slider.value;  // Añadido por mí
+				sliderDisplay.textContent = slider.value;
 
 		    	for(var y = 0; y < count; y++){
 					for(var x = 0; x < count; x++){
-						var node = document.getElementById(y+'-'+x);
-						node.style.background = colors[slider.value+'-'+y+'-'+x]??'yellow';
+						var node = document.getElementById(x+'-'+y);
+						node.style.background = colors[slider.value+'-'+y+'-'+x]??'floralwhite';
 					}
 				}
 			});
-
-			createSquares();  // Añadido por mí
 		</script>
 	</body>
 </html>

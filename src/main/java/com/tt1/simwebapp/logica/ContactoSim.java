@@ -12,6 +12,7 @@ import org.openapitools.client.api.SolicitudApi;
 import org.openapitools.client.model.ResultsResponse;
 import org.openapitools.client.model.Solicitud;
 import org.openapitools.client.model.SolicitudResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,24 +25,21 @@ import java.util.Map;
  * partir de la especificación OpenAPI del servidor dado (swagger.json).
  */
 @Service
-public class ContactoSim implements InterfazContactoSim
-{
-    private static final String LOCALHOST_SIM = "http://localhost:8081";
-    private static final String DOCKERCOMPOSE_SIM = "http://servicio-tt1:8080";
+public class ContactoSim implements InterfazContactoSim {
+    private String apiBaseUrl;
+//    private static final String LOCALHOST_SIM = "http://localhost:8081";
+//    private static final String DOCKERCOMPOSE_SIM = "http://servicio-tt1:8080";
 
     private final String nombreUsuario;
     private final Map<Integer, Entidad> entidades;
     private final ApiClient client;
 
     /**
-     * Crea un nuevo gestor de comunicaciones con el servidor de simulaciones con las entidades:
-     * - id: 1, nombre: gatos, descripción: Gatos salvajes
-     * - id: 2, nombre: perro, descripción: Perros domésticos
-     * , el cliente de servidor de simulaciones por defecto conectado a http://localhost:8080 y el nombre de usuario
-     * "trabajo-individual-tt1".
+     * Crea un nuevo gestor de comunicaciones con el servidor de simulaciones con las entidades: - id: 1, nombre: gatos,
+     * descripción: Gatos salvajes - id: 2, nombre: perro, descripción: Perros domésticos , el cliente de servidor de
+     * simulaciones por defecto conectado a http://localhost:8080 y el nombre de usuario "trabajo-individual-tt1".
      */
-    public ContactoSim()
-    {
+    public ContactoSim() {
         entidades = new HashMap<>();
 
         Entidad entidad = new Entidad();
@@ -65,8 +63,9 @@ public class ContactoSim implements InterfazContactoSim
         nombreUsuario = "trabajo-individual-tt1";
 
         client = Configuration.getDefaultApiClient();
-        client.setBasePath(LOCALHOST_SIM);
-        //client.setBasePath(DOCKERCOMPOSE_SIM);
+        client.setBasePath(System.getenv("API_URL"));
+//        client.setBasePath(LOCALHOST_SIM);
+//        client.setBasePath(DOCKERCOMPOSE_SIM);
     }
 
     /**
@@ -78,8 +77,7 @@ public class ContactoSim implements InterfazContactoSim
      * @param nombreUsuario el nombre de usuario a usar.
      * @param client        el cliente del servidor de simulaciones.
      */
-    public ContactoSim(Map<Integer, Entidad> entidades, String nombreUsuario, ApiClient client)
-    {
+    public ContactoSim(Map<Integer, Entidad> entidades, String nombreUsuario, ApiClient client) {
         this.entidades = entidades;
         this.nombreUsuario = nombreUsuario;
         this.client = client;
@@ -89,8 +87,7 @@ public class ContactoSim implements InterfazContactoSim
      * {@inheritDoc}
      */
     @Override
-    public int solicitarSimulation(DatosSolicitud datosSolicitud)
-    {
+    public int solicitarSimulation(DatosSolicitud datosSolicitud) {
         int token = -1;
         SolicitudApi apiInstance = new SolicitudApi(client);
         Solicitud solicitud;
@@ -98,13 +95,10 @@ public class ContactoSim implements InterfazContactoSim
 
         solicitud = datosSolcitudToSolicitud(datosSolicitud);
 
-        try
-        {
+        try {
             result = apiInstance.solicitudSolicitarPost(nombreUsuario, solicitud);
             token = result.getTokenSolicitud();
-        }
-        catch (ApiException e)
-        {
+        } catch (ApiException e) {
             System.err.println("Exception when calling SolicitudApi#solicitudSolicitarPost");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
@@ -119,12 +113,10 @@ public class ContactoSim implements InterfazContactoSim
      * {@inheritDoc}
      */
     @Override
-    public List<Entidad> getEntities()
-    {
+    public List<Entidad> getEntities() {
         List<Entidad> entidadesList = new ArrayList<>();
 
-        for (Map.Entry<Integer, Entidad> entry : entidades.entrySet())
-        {
+        for (Map.Entry<Integer, Entidad> entry : entidades.entrySet()) {
             entidadesList.add(entry.getValue());
         }
 
@@ -135,8 +127,7 @@ public class ContactoSim implements InterfazContactoSim
      * {@inheritDoc}
      */
     @Override
-    public boolean isValidEntityId(int id)
-    {
+    public boolean isValidEntityId(int id) {
         boolean valid;
 
         valid = entidades.containsKey(id);
@@ -148,19 +139,15 @@ public class ContactoSim implements InterfazContactoSim
      * {@inheritDoc}
      */
     @Override
-    public DatosSimulacion descargarDatos(int tok)
-    {
+    public DatosSimulacion descargarDatos(int tok) {
         ResultadosApi apiInstance = new ResultadosApi(client);
         ResultsResponse result;
         DatosSimulacion datosSimulacion = null;
 
-        try
-        {
+        try {
             result = apiInstance.resultadosPost(nombreUsuario, tok);
             datosSimulacion = dataToDatosSimulation(result.getData());
-        }
-        catch (ApiException e)
-        {
+        } catch (ApiException e) {
             System.err.println("Exception when calling ResultadosApi#resultadosPost");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
@@ -171,14 +158,12 @@ public class ContactoSim implements InterfazContactoSim
         return datosSimulacion;
     }
 
-    private Solicitud datosSolcitudToSolicitud(DatosSolicitud sol)
-    {
+    private Solicitud datosSolcitudToSolicitud(DatosSolicitud sol) {
         Solicitud solicitud = new Solicitud();
         List<Integer> cantidadesEntidades = new ArrayList<>();
         List<String> nombresEntidades = new ArrayList<>();
 
-        for (Map.Entry<Integer, Integer> entry : sol.getNums().entrySet())
-        {
+        for (Map.Entry<Integer, Integer> entry : sol.getNums().entrySet()) {
             cantidadesEntidades.add(entry.getValue());
             nombresEntidades.add(entidades.get(entry.getKey()).getName());
         }
@@ -188,8 +173,7 @@ public class ContactoSim implements InterfazContactoSim
         return solicitud;
     }
 
-    private static DatosSimulacion dataToDatosSimulation(String data)
-    {
+    private static DatosSimulacion dataToDatosSimulation(String data) {
         DatosSimulacion datosSimulacion = new DatosSimulacion();
         String[] dataLines;
         Map<Integer, List<Punto>> puntos = new HashMap<>();
@@ -203,15 +187,13 @@ public class ContactoSim implements InterfazContactoSim
         dataLines = data.split("\n");
 
         anchoTablero = Integer.parseInt(dataLines[0]);
-        for (int i = 1; i < dataLines.length; i++)
-        {
+        for (int i = 1; i < dataLines.length; i++) {
             line = dataLines[i];
             lineData = line.split(",");
 
             sec = Integer.parseInt(lineData[0]);
 
-            if (sec > maxSegundos)
-            {
+            if (sec > maxSegundos) {
                 maxSegundos = sec;
             }
 
@@ -220,8 +202,7 @@ public class ContactoSim implements InterfazContactoSim
             punto.setY(Integer.parseInt(lineData[2]));
             punto.setColor(lineData[3]);
 
-            if (!puntos.containsKey(sec))
-            {
+            if (!puntos.containsKey(sec)) {
                 puntos.put(sec, new ArrayList<>());
             }
 

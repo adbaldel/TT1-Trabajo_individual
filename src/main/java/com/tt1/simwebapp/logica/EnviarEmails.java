@@ -6,6 +6,7 @@ import org.openapitools.client.ApiException;
 import org.openapitools.client.Configuration;
 import org.openapitools.client.api.EmailApi;
 import org.openapitools.client.model.EmailResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,8 +16,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class EnviarEmails implements InterfazEnviarEmails
 {
-    private static final String LOCALHOST_EMAIL = "http://localhost:8081";
-    private static final String DOCKERCOMPOSE_EMAIL = "http://servicio-tt1:8080";
+//    private static final String LOCALHOST_EMAIL = "http://localhost:8081";
+//    private static final String DOCKERCOMPOSE_EMAIL = "http://servicio-tt1:8080";
 
     private final ApiClient client;
 
@@ -27,8 +28,9 @@ public class EnviarEmails implements InterfazEnviarEmails
     public EnviarEmails()
     {
         client = Configuration.getDefaultApiClient();
-        client.setBasePath(LOCALHOST_EMAIL);
-        //client.setBasePath(DOCKERCOMPOSE_EMAIL);
+        client.setBasePath(System.getenv("API_URL"));
+//        client.setBasePath(LOCALHOST_EMAIL);
+//        client.setBasePath(DOCKERCOMPOSE_EMAIL);
     }
 
     /**
