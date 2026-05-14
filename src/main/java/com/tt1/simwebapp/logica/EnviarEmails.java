@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class EnviarEmails implements InterfazEnviarEmails
 {
-//    private static final String LOCALHOST_EMAIL = "http://localhost:8081";
-//    private static final String DOCKERCOMPOSE_EMAIL = "http://servicio-tt1:8080";
+    private static final String LOCALHOST_EMAIL = "http://localhost:8081";
+    private static final String DOCKERCOMPOSE_EMAIL = "http://servicio-tt1:8080";
 
     private final ApiClient client;
 
@@ -28,8 +28,8 @@ public class EnviarEmails implements InterfazEnviarEmails
     public EnviarEmails()
     {
         client = Configuration.getDefaultApiClient();
-        client.setBasePath(System.getenv("API_URL"));
-//        client.setBasePath(LOCALHOST_EMAIL);
+//        client.setBasePath(System.getenv("API_URL"));
+        client.setBasePath(LOCALHOST_EMAIL);
 //        client.setBasePath(DOCKERCOMPOSE_EMAIL);
     }
 

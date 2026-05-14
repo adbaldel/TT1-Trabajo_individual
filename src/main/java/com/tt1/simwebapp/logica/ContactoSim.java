@@ -26,9 +26,8 @@ import java.util.Map;
  */
 @Service
 public class ContactoSim implements InterfazContactoSim {
-    private String apiBaseUrl;
-//    private static final String LOCALHOST_SIM = "http://localhost:8081";
-//    private static final String DOCKERCOMPOSE_SIM = "http://servicio-tt1:8080";
+    private static final String LOCALHOST_SIM = "http://localhost:8081";
+    private static final String DOCKERCOMPOSE_SIM = "http://servicio-tt1:8080";
 
     private final String nombreUsuario;
     private final Map<Integer, Entidad> entidades;
@@ -63,8 +62,8 @@ public class ContactoSim implements InterfazContactoSim {
         nombreUsuario = "trabajo-individual-tt1";
 
         client = Configuration.getDefaultApiClient();
-        client.setBasePath(System.getenv("API_URL"));
-//        client.setBasePath(LOCALHOST_SIM);
+//        client.setBasePath(System.getenv("API_URL"));
+        client.setBasePath(LOCALHOST_SIM);
 //        client.setBasePath(DOCKERCOMPOSE_SIM);
     }
 

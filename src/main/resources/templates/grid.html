@@ -1,60 +1,260 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-    	<title>Welcome</title>
-		<style>
-			.grid {
-		  		display: grid;
-		  		grid-template-columns: repeat(3, 50px);
-		  		grid-gap: 5px;
-			}
+<head>
+	<title>Visualización de la Isla</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		/* Shared Ocean Theme */
+		body {
+			background-color: #006994;
+			background-image: radial-gradient(circle at center, #00b4db 0%, #0083b0 100%);
+			min-height: 100vh;
+			margin: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			padding: 20px;
+			box-sizing: border-box;
+		}
 
-			.grid div {
-		  		width: 50px;
-		  		height: 50px;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="slider-container">
-		    <input type="range" id="mySlider" min="0" th:max="${maxTime}-1" value="0"> <!-- Cambiado el value por mí -->
-		    <span id="sliderValue">0</span>
+		/* The Grid Island Container */
+		.island-card {
+			background-color: #f4e4c1;
+			background-image: radial-gradient(circle at top left, #fff0ce 0%, #e3cda3 100%);
+			border-radius: 30px;
+			padding: 40px;
+			box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.5);
+			/* Allows scrolling if the grid count gets extremely large */
+			max-width: 90vw;
+			max-height: 90vh;
+			overflow: auto;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		/* Slider Controls */
+		.slider-container {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 15px;
+			margin-bottom: 25px;
+			background: rgba(255, 255, 255, 0.6);
+			padding: 12px 25px;
+			border-radius: 20px;
+			box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+			width: fit-content;
+		}
+
+		.slider-container label {
+			color: #5c4033;
+			font-weight: bold;
+		}
+
+		input[type="range"] {
+			accent-color: #0083b0;
+			cursor: pointer;
+			width: 200px;
+		}
+
+		#sliderValue {
+			font-weight: bold;
+			color: #0083b0;
+			background: #fff;
+			padding: 4px 12px;
+			border-radius: 10px;
+			min-width: 20px;
+			text-align: center;
+		}
+
+		/* Playback Controls */
+		.control-btn {
+			background: #0083b0;
+			color: white;
+			border: none;
+			padding: 8px 16px;
+			border-radius: 10px;
+			font-size: 14px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: background 0.3s, transform 0.1s;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+			min-width: 90px;
+		}
+
+		.control-btn:hover {
+			background: #006994;
+		}
+
+		.control-btn:active {
+			transform: scale(0.95);
+		}
+
+		.velocity-select {
+			padding: 6px 10px;
+			border-radius: 8px;
+			border: 2px solid #d4b886;
+			background: rgba(255, 255, 255, 0.8);
+			color: #5c4033;
+			font-weight: bold;
+			cursor: pointer;
+			outline: none;
+			transition: border-color 0.3s;
+		}
+
+		.velocity-select:focus {
+			border-color: #0083b0;
+		}
+
+		.velocity-wrapper {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			border-right: 2px solid rgba(92, 64, 51, 0.2);
+			padding-right: 15px;
+		}
+
+		/* Grid specific styles */
+		.grid {
+			display: grid;
+			grid-gap: 5px; /* Creates "channels" between island blocks */
+			padding: 10px;
+			background-color: rgba(0, 131, 176, 0.15); /* Shallow water base */
+			border-radius: 15px;
+		}
+
+		.grid div {
+			width: 50px;
+			height: 50px;
+			border-radius: 8px; /* Softens the sharp squares slightly */
+			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+			transition: background-color 0.15s ease; /* Slightly faster transition to keep up with animation */
+		}
+	</style>
+</head>
+<body>
+<div class="island-card">
+	<div class="slider-container">
+		<!-- Playback Controls -->
+		<button id="playBtn" class="control-btn">▶ Play</button>
+		<div class="velocity-wrapper">
+			<label for="velocity">Speed:</label>
+			<select id="velocity" class="velocity-select">
+				<option value="1000">0.5x</option>
+				<option value="500" selected>1x</option>
+				<option value="250">2x</option>
+				<option value="100">5x</option>
+			</select>
 		</div>
-		<div class="grid" id='gr'>
-			<!-- grid simulación -->
-		</div>
 
-		<script th:inline="javascript">
-			const count = [[${count}]];
-			const colors = [[${colors}]];
+		<!-- Timeline -->
+		<label for="mySlider">Timeline:</label>
+		<input type="range" id="mySlider" min="0" th:max="${maxTime}" value="0">
+		<span id="sliderValue">0</span>
+	</div>
 
-			function createSquares(){
-				var grid = document.getElementById('gr');
-				for(var y = 0; y < count; y++){
-					for(var x = 0; x < count; x++){
-				    	var node = document.createElement("div");
-						node.id = x+'-'+y;
-				      	grid.appendChild(node);
-				    }
-				}
-				document.getElementsByClassName('grid').item(0).style.gridTemplateColumns = 'repeat('+count+',50px)';
+	<div class="grid" id="gr">
+		<!-- grid simulación -->
+	</div>
+</div>
+
+<script th:inline="javascript">
+	// Safe defaults so preview works if variables aren't injected yet
+	const count = /*[[${count}]]*/ 3;
+	const colors = /*[[${colors}]]*/ {};
+
+	const slider = document.getElementById("mySlider");
+	const sliderDisplay = document.getElementById("sliderValue");
+	const playBtn = document.getElementById("playBtn");
+	const velocitySelect = document.getElementById("velocity");
+
+	let playInterval = null;
+
+	function createSquares(){
+		var grid = document.getElementById('gr');
+		for(var y = 0; y < count; y++){
+			for(var x = 0; x < count; x++){
+				var node = document.createElement("div");
+				node.id = x+'-'+y;
+				grid.appendChild(node);
+			}
+		}
+		document.getElementsByClassName('grid').item(0).style.gridTemplateColumns = 'repeat('+count+',50px)';
+	}
+
+	function drawSimulationTick() {
+		sliderDisplay.textContent = slider.value;
+
+		for(var y = 0; y < count; y++){
+			for(var x = 0; x < count; x++){
+				var node = document.getElementById(x+'-'+y);
+				// Floralwhite acts as the default "sand" if no color is provided.
+				node.style.background = colors[slider.value+'-'+y+'-'+x] ?? 'floralwhite';
+			}
+		}
+	}
+
+	// Playback Logic
+	function togglePlay() {
+		if (playInterval) {
+			stopPlaying();
+		} else {
+			startPlaying();
+		}
+	}
+
+	function stopPlaying() {
+		clearInterval(playInterval);
+		playInterval = null;
+		playBtn.textContent = "▶ Play";
+		playBtn.style.background = "#0083b0";
+	}
+
+	function startPlaying() {
+		playBtn.textContent = "⏸ Pause";
+		playBtn.style.background = "#d35400"; // Distinctive pause color
+
+		const speedMs = parseInt(velocitySelect.value, 10);
+
+		playInterval = setInterval(() => {
+			let currentValue = parseInt(slider.value, 10);
+			// Safe check for max value (fallback to 100 if thymeleaf isn't rendered)
+			let maxValue = parseInt(slider.getAttribute('max') || 100, 10);
+
+			if (currentValue >= maxValue) {
+				slider.value = 0; // Loop back to start
+			} else {
+				slider.value = currentValue + 1;
 			}
 
-			createSquares();
+			drawSimulationTick();
+		}, speedMs);
+	}
 
-			const slider = document.getElementById("mySlider");
-			const sliderDisplay = document.getElementById("sliderValue");
+	// Event Listeners
+	slider.addEventListener("input", function() {
+		// Optional: Auto-pause if user interacts with the slider manually
+		if (playInterval) stopPlaying();
+		drawSimulationTick();
+	});
 
-			slider.addEventListener("input", function() {
-				sliderDisplay.textContent = slider.value;
+	playBtn.addEventListener("click", togglePlay);
 
-		    	for(var y = 0; y < count; y++){
-					for(var x = 0; x < count; x++){
-						var node = document.getElementById(x+'-'+y);
-						node.style.background = colors[slider.value+'-'+y+'-'+x]??'floralwhite';
-					}
-				}
-			});
-		</script>
-	</body>
+	velocitySelect.addEventListener("change", function() {
+		// If already playing, restart the interval with the new speed
+		if (playInterval) {
+			stopPlaying();
+			startPlaying();
+		}
+	});
+
+	// Initialization
+	createSquares();
+	drawSimulationTick();
+</script>
+</body>
 </html>

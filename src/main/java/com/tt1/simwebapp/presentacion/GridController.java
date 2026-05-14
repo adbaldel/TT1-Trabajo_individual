@@ -52,7 +52,7 @@ public class GridController
         model.addAttribute("maxTime", ds.getMaxSegundos());
         Map<String, String> colors = new HashMap<>();
 
-        for (var t = 0; t < ds.getMaxSegundos(); t++)
+        for (var t = 0; t <= ds.getMaxSegundos(); t++)
         {
             for (Punto p : ds.getPuntos().get(t))
             {
