@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Inicio')}"></head>
+<body class="pt-28 pb-10 px-4 flex justify-center items-center min-h-screen">
+<div th:replace="~{fragments/layout :: navbar}"></div>
+
+<div class="cyber-panel max-w-lg text-center p-8 mt-10 relative">
+    <div class="absolute -top-4 left-4 bg-cyberbg px-2 text-cybergreen cyber-title text-xl border-x border-cybergreen">
+        SYS.WELCOME // <span th:text="${nombreUsuario}">Usuario</span>
+    </div>
+
+    <div class="text-lg leading-relaxed mb-8 mt-6 border border-cybercyan/30 bg-cyberbg/50 p-6 text-left text-cybercyan/90">
+        <p>Desde este panel de control puedes gestionar todo tu entorno. Configura nuevas simulaciones, comprueba el estado de tus peticiones en curso o descarga los resultados generados por el servidor.</p>
+    </div>
+
+    <button onclick="window.location.href='/solicitar'" class="cyber-btn text-cybergreen px-8 py-4 text-xl w-full">
+        [ COMENZAR SIMULACIÓN ]
+    </button>
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Configurar Simulación')}"></head>
+<body class="pt-28 pb-10 px-4 flex justify-center items-start min-h-screen">
+<div th:replace="~{fragments/layout :: navbar}"></div>
+
+<div class="cyber-panel max-w-xl w-full p-8 mt-10 relative">
+
+    <h2 class="absolute -top-4 left-4 bg-cyberbg px-2 text-cybercyan cyber-title text-xl border-x border-cybercyan">
+        SYS.CONFIG //
+    </h2>
+
+    <div th:if="${problemDetails != null}" class="border border-cyberpink bg-cyberpink/10 p-6 relative mt-6 mb-4">
+        <h3 class="text-sm cyber-title text-cyberpink bg-cyberbg px-2 absolute -top-3 left-4 border-x border-cyberpink">ERR_DETECTED</h3>
+        <p class="text-lg mt-2 text-cyberpink" th:text="${problemDetails}">Detalles del problema</p>
+    </div>
+
+    <form th:action="@{/solicitar}" method="post" class="space-y-8 mt-8">
+        <div class="border border-cybercyan/30 bg-cyberbg/50 p-6 relative">
+            <h3 class="text-sm cyber-title text-cybercyan/70 bg-cyberbg px-2 absolute -top-3 left-4">ENTIDADES_</h3>
+
+            <div class="space-y-6 mt-4">
+                <div th:each="creatureName : ${creatureNames}" class="flex flex-col gap-2">
+                    <label th:for="${creatureName}" th:text="'NUM. DE ' + ${creatureName} + 'S_'" class="font-display text-cybercyan/70 text-sm uppercase tracking-widest"></label>
+                    <input type="number" min="0" th:id="${creatureName}" th:name="${creatureName}" value="0" required class="cyber-input p-2 text-xl" />
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="cyber-btn text-cybercyan w-full py-4 text-xl">
+            [ INIT_SIMULATION ]
+        </button>
+    </form>
+</div>
+</body>
+</html>
