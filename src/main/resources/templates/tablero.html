@@ -76,10 +76,88 @@
 </div>
 
 <script th:if="${problemDetails == null}" th:inline="javascript">
-	// ... [Keep your existing JavaScript exactly as it is] ...
-	// Note: In drawSimulationTick(), you might want to change 'floralwhite' to 'transparent'
-	// so it reveals the dark .grid-container div background.
-	// node.style.background = colors[slider.value+'-'+y+'-'+x] ?? 'transparent';
+	const gridSize = /*[[${gridSize}]]*/ 3;
+	const colors = /*[[${colors}]]*/ {};
+
+	const slider = document.getElementById("mySlider");
+	const sliderDisplay = document.getElementById("sliderValue");
+	const playBtn = document.getElementById("playBtn");
+	const velocitySelect = document.getElementById("velocity");
+
+	let playInterval = null;
+
+	function createSquares(){
+		var grid = document.getElementById('gr');
+		for(var y = 0; y < gridSize; y++){
+			for(var x = 0; x < gridSize; x++){
+				var node = document.createElement("div");
+				node.id = x+'-'+y;
+				grid.appendChild(node);
+			}
+		}
+		document.getElementsByClassName('grid-container').item(0).style.gridTemplateColumns = 'repeat('+gridSize+',50px)';
+	}
+
+	function drawSimulationTick() {
+		sliderDisplay.textContent = slider.value;
+
+		for(var y = 0; y < gridSize; y++){
+			for(var x = 0; x < gridSize; x++){
+				var node = document.getElementById(x+'-'+y);
+				node.style.background = colors[slider.value+'-'+y+'-'+x] ?? '#121212';
+			}
+		}
+	}
+
+	function togglePlay() {
+		if (playInterval) { stopPlaying(); } else { startPlaying(); }
+	}
+
+	function stopPlaying() {
+		clearInterval(playInterval);
+		playInterval = null;
+		playBtn.textContent = "▶ Play";
+		playBtn.style.background = "white";
+		playBtn.style.color = "black";
+	}
+
+	function startPlaying() {
+		playBtn.textContent = "⏸ Pause";
+		playBtn.style.background = "black";
+		playBtn.style.color = "white";
+
+		const speedMs = parseInt(velocitySelect.value, 10);
+
+		playInterval = setInterval(() => {
+			let currentValue = parseInt(slider.value, 10);
+			let maxValue = parseInt(slider.getAttribute('max') || 100, 10);
+
+			if (currentValue >= maxValue) {
+				slider.value = 0;
+			} else {
+				slider.value = currentValue + 1;
+			}
+
+			drawSimulationTick();
+		}, speedMs);
+	}
+
+	slider.addEventListener("input", function() {
+		if (playInterval) stopPlaying();
+		drawSimulationTick();
+	});
+
+	playBtn.addEventListener("click", togglePlay);
+
+	velocitySelect.addEventListener("change", function() {
+		if (playInterval) {
+			stopPlaying();
+			startPlaying();
+		}
+	});
+
+	createSquares();
+	drawSimulationTick();
 </script>
 </body>
 </html>
