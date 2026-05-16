@@ -1,28 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Resultados')}"></head>
-<body class="pt-28 pb-10 px-4 flex justify-center items-start min-h-screen">
-<div th:replace="~{fragments/layout :: navbar}"></div>
+<head>
+    <meta charset="UTF-8">
+    <title>Fetch Results</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container">
+        <h2>Load Simulation Board</h2>
+        <p>Enter the token of a <strong>FINISHED</strong> simulation to visualize the data.</p>
 
-<div class="cyber-panel max-w-xl w-full p-8 mt-10 relative">
-    <h2 class="absolute -top-4 left-4 bg-cyberbg px-2 text-cybergreen cyber-title text-xl border-x border-cybergreen">
-        DATA.DOWNLOAD //
-    </h2>
-
-    <form th:action="@{/resultado}" method="post" class="space-y-8 mt-8">
-        <div class="border border-cybergreen/30 bg-cyberbg/50 p-6 relative space-y-6">
-            <h3 class="text-sm cyber-title text-cybergreen/70 bg-cyberbg px-2 absolute -top-3 left-4">CREDENTIALS_</h3>
-
-            <div class="flex flex-col gap-2 mt-2">
-                <label for="token" class="font-display text-cybergreen/70 text-sm uppercase tracking-widest">TOKEN_ID_</label>
-                <input type="number" id="token" class="cyber-input focus:border-cybergreen text-cybergreen focus:bg-cybergreen/10 border-cybergreen/50 p-2 text-xl" name="token" required />
+        <form th:action="@{/resultado}" method="post">
+            <div class="form-group">
+                <label for="token">Simulation Token (ID)</label>
+                <input type="number" id="token" name="token" required placeholder="e.g. 12345">
             </div>
+            <button type="submit">Visualize Board</button>
+        </form>
+         <div class="nav-links" style="margin-top: 1rem;">
+             <a th:href="@{/home}" style="border-color: transparent; background: transparent; color: var(--text-muted);">Back to Home</a>
         </div>
-
-        <button type="submit" class="cyber-btn text-cybergreen w-full py-4 text-xl">
-            [ OBTENER_RESULTADOS ]
-        </button>
-    </form>
-</div>
+    </div>
 </body>
 </html>

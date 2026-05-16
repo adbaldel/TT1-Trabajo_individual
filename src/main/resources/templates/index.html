@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('System_Access')}"></head>
-<body class="pt-28 pb-10 px-4 flex justify-center items-center min-h-screen">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Simulation Hub</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Welcome</h1>
+    <p>Please enter your username to access the system.</p>
 
-<div class="cyber-panel max-w-sm w-full p-8 relative mt-10">
-    <div class="absolute -top-4 left-4 bg-cyberbg px-2 text-cybercyan cyber-title text-xl border-l-2 border-r-2 border-cybercyan">
-        SYS.LOGIN //
-    </div>
-
-    <form th:action="@{/login}" method="post" class="space-y-8 mt-6">
-        <div class="flex flex-col gap-2">
-            <label for="nombreUsuario" class="font-display text-cybercyan/70 text-sm uppercase tracking-widest">ID de Usuario_</label>
-            <input type="text" id="nombreUsuario" name="nombreUsuario" required class="cyber-input p-2 text-xl" placeholder="Ingresa credenciales..." />
+    <form th:action="@{/login}" method="post">
+        <div class="form-group">
+            <label for="nombreUsuario">Username</label>
+            <input type="text" id="nombreUsuario" name="nombreUsuario" required placeholder="e.g. researcher_01">
         </div>
-
-        <button type="submit" class="cyber-btn text-cybercyan w-full py-3 text-xl">
-            [ INICIAR SESIÓN ]
-        </button>
+        <button type="submit">Log In</button>
     </form>
 </div>
-
 </body>
 </html>
