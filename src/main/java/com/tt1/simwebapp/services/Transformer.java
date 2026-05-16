@@ -189,11 +189,17 @@ public class Transformer {
     private static String createProblemDetails(ApiException apiException) {
         int titleIndex = 7;
         int detailIndex = 13;
+
+        if (apiException.getResponseBody() == null || apiException.getResponseBody().isEmpty()) {
+            return String.format("HTTP Status Code %d.\n%s.", apiException.getCode(), apiException.getMessage());
+        }
+
         String[] reasonSplit = apiException.getResponseBody().split("\"");
         String errorMessage;
 
         if (reasonSplit.length <= detailIndex) {
-            errorMessage = String.format("HTTP Status Code %d: %s.", apiException.getCode(), apiException.getMessage());
+            errorMessage = String.format("HTTP Status Code %d.\n%s.", apiException.getCode(),
+                    apiException.getMessage());
         } else {
             String reasonTitle = reasonSplit[titleIndex];
             String reasonDetail = reasonSplit[detailIndex];
